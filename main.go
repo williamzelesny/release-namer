@@ -1,10 +1,10 @@
 package main
 
 import (
-	"candy-release-namer/candies"
 	"golang.org/x/exp/slog"
 	"os"
 	"strconv"
+	"williamzelesny/release-namer/candies"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module release-namer
+module williamzelesny/release-namer
 
 go 1.20
 
