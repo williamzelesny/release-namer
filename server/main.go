@@ -7,8 +7,8 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/williamzelesny/release-namer/releasenamer"
 	"google.golang.org/grpc"
+	pb "williamzelesny/release-namer/releasenamer"
 )
 
 var (
