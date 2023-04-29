@@ -11,7 +11,7 @@ package releasenamer;
 
 service ReleaseNamer {
 
-  rpc GetCandies(google.protobuf.Empty) returns (Candy){}
+  rpc GetCandies(google.protobuf.Empty) returns (CandyReply){}
 
 }
 
@@ -19,8 +19,8 @@ message Empty {
 
 }
 
-message Candy {
-
+message CandyReply {
+  string name = 1;
 }
 
 
