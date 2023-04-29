@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ReleaseNamerClient interface {
-	GetCandies(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*CandyReply, error)
+	GetCandies(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*CandyResponse, error)
 }
 
 type releaseNamerClient struct {
@@ -34,8 +34,8 @@ func NewReleaseNamerClient(cc grpc.ClientConnInterface) ReleaseNamerClient {
 	return &releaseNamerClient{cc}
 }
 
-func (c *releaseNamerClient) GetCandies(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*CandyReply, error) {
-	out := new(CandyReply)
+func (c *releaseNamerClient) GetCandies(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*CandyResponse, error) {
+	out := new(CandyResponse)
 	err := c.cc.Invoke(ctx, "/releasenamer.ReleaseNamer/GetCandies", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func (c *releaseNamerClient) GetCandies(ctx context.Context, in *empty.Empty, op
 // All implementations must embed UnimplementedReleaseNamerServer
 // for forward compatibility
 type ReleaseNamerServer interface {
-	GetCandies(context.Context, *empty.Empty) (*CandyReply, error)
+	GetCandies(context.Context, *empty.Empty) (*CandyResponse, error)
 	mustEmbedUnimplementedReleaseNamerServer()
 }
 
@@ -55,7 +55,7 @@ type ReleaseNamerServer interface {
 type UnimplementedReleaseNamerServer struct {
 }
 
-func (UnimplementedReleaseNamerServer) GetCandies(context.Context, *empty.Empty) (*CandyReply, error) {
+func (UnimplementedReleaseNamerServer) GetCandies(context.Context, *empty.Empty) (*CandyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCandies not implemented")
 }
 func (UnimplementedReleaseNamerServer) mustEmbedUnimplementedReleaseNamerServer() {}

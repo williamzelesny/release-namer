@@ -22,8 +22,12 @@ type releaseNamerServer struct {
 	pb.UnimplementedReleaseNamerServer
 }
 
-func (s *releaseNamerServer) GetCandies(ctx context.Context, empty *empty.Empty) (*pb.CandyReply, error) {
-	return &pb.CandyReply{Name: "Twizzlers"}, nil
+func (s *releaseNamerServer) GetCandies(ctx context.Context, empty *empty.Empty) (*pb.CandyResponse, error) {
+	candies := []*pb.Candy{
+		&pb.Candy{Name: "Twizzlers"},
+		&pb.Candy{Name: "Skittles"},
+	}
+	return &pb.CandyResponse{Candies: candies}, nil
 }
 
 func main() {

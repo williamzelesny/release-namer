@@ -26,8 +26,6 @@ done
 
 RELEASENAMER_ROOT="${PWD}"
 RELEASENAMER_PATH="${RELEASENAMER_ROOT}/releasenamer"
-GOGOPROTO_ROOT="$(GO111MODULE=on go list -mod=readonly -f '{{ .Dir }}' -m github.com/gogo/protobuf)"
-GOGOPROTO_PATH="${GOGOPROTO_ROOT}:${GOGOPROTO_ROOT}/protobuf"
 GRPC_GATEWAY_ROOT="$(GO111MODULE=on go list -mod=readonly -f '{{ .Dir }}' -m github.com/grpc-ecosystem/grpc-gateway)"
 
 DIRS="releasenamer"
