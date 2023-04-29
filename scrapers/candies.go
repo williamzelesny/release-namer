@@ -1,4 +1,4 @@
-package candies
+package scrapers
 
 import (
 	"net/http"

@@ -4,13 +4,13 @@ import (
 	"golang.org/x/exp/slog"
 	"os"
 	"strconv"
-	"williamzelesny/release-namer/candies"
+	"williamzelesny/release-namer/scrapers"
 )
 
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout))
 	logger.Info("Getting candies")
-	candies, err := candies.GetCandies()
+	candies, err := scrapers.GetCandies()
 	if err != nil {
 		logger.Error(err.Error())
 	}
