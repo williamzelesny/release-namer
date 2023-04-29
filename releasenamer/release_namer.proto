@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 option go_package = "github.com/williamzelesny/release-namer/releasenamer";
 option java_multiple_files = true;
 option java_package = "io.grpc.examples.releasenamer";
@@ -7,4 +9,18 @@ option java_outer_classname = "ReleaseNamerProto";
 
 package releasenamer;
 
-service ReleaseNamer {}
+service ReleaseNamer {
+
+  rpc GetCandies(google.protobuf.Empty) returns (Candy){}
+
+}
+
+message Empty {
+
+}
+
+message Candy {
+
+}
+
+

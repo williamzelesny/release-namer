@@ -7,7 +7,11 @@
 package releasenamer
 
 import (
+	context "context"
+	empty "github.com/golang/protobuf/ptypes/empty"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -19,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ReleaseNamerClient interface {
+	GetCandies(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Candy, error)
 }
 
 type releaseNamerClient struct {
@@ -29,10 +34,20 @@ func NewReleaseNamerClient(cc grpc.ClientConnInterface) ReleaseNamerClient {
 	return &releaseNamerClient{cc}
 }
 
+func (c *releaseNamerClient) GetCandies(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Candy, error) {
+	out := new(Candy)
+	err := c.cc.Invoke(ctx, "/releasenamer.ReleaseNamer/GetCandies", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReleaseNamerServer is the server API for ReleaseNamer service.
 // All implementations must embed UnimplementedReleaseNamerServer
 // for forward compatibility
 type ReleaseNamerServer interface {
+	GetCandies(context.Context, *empty.Empty) (*Candy, error)
 	mustEmbedUnimplementedReleaseNamerServer()
 }
 
@@ -40,6 +55,9 @@ type ReleaseNamerServer interface {
 type UnimplementedReleaseNamerServer struct {
 }
 
+func (UnimplementedReleaseNamerServer) GetCandies(context.Context, *empty.Empty) (*Candy, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCandies not implemented")
+}
 func (UnimplementedReleaseNamerServer) mustEmbedUnimplementedReleaseNamerServer() {}
 
 // UnsafeReleaseNamerServer may be embedded to opt out of forward compatibility for this service.
@@ -53,13 +71,36 @@ func RegisterReleaseNamerServer(s grpc.ServiceRegistrar, srv ReleaseNamerServer)
 	s.RegisterService(&ReleaseNamer_ServiceDesc, srv)
 }
 
+func _ReleaseNamer_GetCandies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(empty.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReleaseNamerServer).GetCandies(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/releasenamer.ReleaseNamer/GetCandies",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReleaseNamerServer).GetCandies(ctx, req.(*empty.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ReleaseNamer_ServiceDesc is the grpc.ServiceDesc for ReleaseNamer service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ReleaseNamer_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "releasenamer.ReleaseNamer",
 	HandlerType: (*ReleaseNamerServer)(nil),
-	Methods:     []grpc.MethodDesc{},
-	Streams:     []grpc.StreamDesc{},
-	Metadata:    "releasenamer/release_namer.proto",
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetCandies",
+			Handler:    _ReleaseNamer_GetCandies_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "releasenamer/release_namer.proto",
 }
