@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/golang/protobuf/ptypes/empty"
 	"golang.org/x/exp/slog"
-	"log"
 	"net"
 	"os"
 
@@ -33,12 +32,12 @@ func main() {
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		logger.Error("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
 	pb.RegisterReleaseNamerServer(s, &releaseNamerServer{})
 	logger.Info("server listening at " + lis.Addr().String())
 	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		logger.Error("failed to serve: %v", err)
 	}
 }
