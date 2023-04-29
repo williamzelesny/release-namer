@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.6.1
-// source: releasenamer/release_namer.proto
+// source: release_namer.proto
 
 package releasenamer
 
@@ -102,5 +102,5 @@ var ReleaseNamer_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "releasenamer/release_namer.proto",
+	Metadata: "release_namer.proto",
 }
