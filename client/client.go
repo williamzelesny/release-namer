@@ -4,10 +4,12 @@ import (
 	"context"
 	"flag"
 	"github.com/golang/protobuf/ptypes/empty"
+	"golang.org/x/exp/slog"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
+	"os"
 	"time"
 	"williamzelesny/release-namer/data"
 	pb "williamzelesny/release-namer/releasenamer"
@@ -21,17 +23,19 @@ var (
 )
 
 // getCandies gets the candy.
-func getCandies(client pb.ReleaseNamerClient, empty *empty.Empty) {
+func getCandies(logger *slog.Logger, client pb.ReleaseNamerClient, empty *empty.Empty) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	feature, err := client.GetCandies(ctx, empty)
 	if err != nil {
-		log.Fatalf("client.GetFeature failed: %v", err)
+		logger.Error("client.GetFeature failed: %v", err)
 	}
 	log.Println(feature)
 }
 
 func main() {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout))
+
 	flag.Parse()
 	var opts []grpc.DialOption
 	if *tls {
@@ -40,7 +44,7 @@ func main() {
 		}
 		creds, err := credentials.NewClientTLSFromFile(*caFile, *serverHostOverride)
 		if err != nil {
-			log.Fatalf("Failed to create TLS credentials: %v", err)
+			logger.Error("Failed to create TLS credentials: %v", err)
 		}
 		opts = append(opts, grpc.WithTransportCredentials(creds))
 	} else {
@@ -49,11 +53,11 @@ func main() {
 
 	conn, err := grpc.Dial(*serverAddr, opts...)
 	if err != nil {
-		log.Fatalf("fail to dial: %v", err)
+		logger.Error("fail to dial: %v", err)
 	}
 	defer conn.Close()
 	client := pb.NewReleaseNamerClient(conn)
 
 	// RecordRoute
-	getCandies(client, &empty.Empty{})
+	getCandies(logger, client, &empty.Empty{})
 }
