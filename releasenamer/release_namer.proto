@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option go_package = "github.com/williamzelesny/release-namer/releasenamer";
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.routeguide";
+option java_outer_classname = "RouteGuideProto";
+
+package releasenamer;
+
+service ReleaseNamer {}
