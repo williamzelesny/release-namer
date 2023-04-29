@@ -3,8 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"golang.org/x/exp/slog"
 	"log"
 	"net"
+	"os"
 
 	"google.golang.org/grpc"
 	pb "williamzelesny/release-namer/releasenamer"
@@ -20,6 +22,8 @@ type server struct {
 }
 
 func main() {
+	logger := slog.New(slog.NewJSONHandler(os.Stdout))
+
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
@@ -27,7 +31,7 @@ func main() {
 	}
 	s := grpc.NewServer()
 	pb.RegisterReleaseNamerServer(s, &server{})
-	log.Printf("server listening at %v", lis.Addr())
+	logger.Info("server listening at " + lis.Addr().String())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
