@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ReleaseNamerClient interface {
 	GetCandies(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*CandyResponse, error)
+	GetRandomCandy(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*CandyResponse, error)
 }
 
 type releaseNamerClient struct {
@@ -43,11 +44,21 @@ func (c *releaseNamerClient) GetCandies(ctx context.Context, in *empty.Empty, op
 	return out, nil
 }
 
+func (c *releaseNamerClient) GetRandomCandy(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*CandyResponse, error) {
+	out := new(CandyResponse)
+	err := c.cc.Invoke(ctx, "/releasenamer.ReleaseNamer/GetRandomCandy", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReleaseNamerServer is the server API for ReleaseNamer service.
 // All implementations must embed UnimplementedReleaseNamerServer
 // for forward compatibility
 type ReleaseNamerServer interface {
 	GetCandies(context.Context, *empty.Empty) (*CandyResponse, error)
+	GetRandomCandy(context.Context, *empty.Empty) (*CandyResponse, error)
 	mustEmbedUnimplementedReleaseNamerServer()
 }
 
@@ -57,6 +68,9 @@ type UnimplementedReleaseNamerServer struct {
 
 func (UnimplementedReleaseNamerServer) GetCandies(context.Context, *empty.Empty) (*CandyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCandies not implemented")
+}
+func (UnimplementedReleaseNamerServer) GetRandomCandy(context.Context, *empty.Empty) (*CandyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRandomCandy not implemented")
 }
 func (UnimplementedReleaseNamerServer) mustEmbedUnimplementedReleaseNamerServer() {}
 
@@ -89,6 +103,24 @@ func _ReleaseNamer_GetCandies_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReleaseNamer_GetRandomCandy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(empty.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReleaseNamerServer).GetRandomCandy(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/releasenamer.ReleaseNamer/GetRandomCandy",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReleaseNamerServer).GetRandomCandy(ctx, req.(*empty.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ReleaseNamer_ServiceDesc is the grpc.ServiceDesc for ReleaseNamer service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -99,6 +131,10 @@ var ReleaseNamer_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCandies",
 			Handler:    _ReleaseNamer_GetCandies_Handler,
+		},
+		{
+			MethodName: "GetRandomCandy",
+			Handler:    _ReleaseNamer_GetRandomCandy_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

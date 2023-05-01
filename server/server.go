@@ -5,9 +5,11 @@ import (
 	"flag"
 	"fmt"
 	"github.com/golang/protobuf/ptypes/empty"
+	"golang.org/x/exp/rand"
 	"golang.org/x/exp/slog"
 	"net"
 	"os"
+	"time"
 	"williamzelesny/release-namer/scrapers"
 
 	"google.golang.org/grpc"
@@ -31,6 +33,13 @@ func (s *releaseNamerServer) GetCandies(ctx context.Context, empty *empty.Empty)
 	candies, _ := scrapers.GetCandies()
 
 	return &pb.CandyResponse{Candies: candies}, nil
+}
+
+func (s *releaseNamerServer) GetRandomCandy(ctx context.Context, empty *empty.Empty) (*pb.CandyResponse, error) {
+	candies, _ := scrapers.GetCandies()
+	rand.Seed(uint64(time.Now().UnixNano()))
+	randomIndex := rand.Intn(len(candies))
+	return &pb.CandyResponse{Candies: []*pb.Candy{candies[randomIndex]}}, nil
 }
 
 func main() {

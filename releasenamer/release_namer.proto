@@ -13,6 +13,8 @@ service ReleaseNamer {
 
   rpc GetCandies(google.protobuf.Empty) returns (CandyResponse){}
 
+  rpc GetRandomCandy(google.protobuf.Empty) returns (CandyResponse){}
+
 }
 
 message Empty {

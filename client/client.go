@@ -33,6 +33,17 @@ func getCandies(logger *slog.Logger, client pb.ReleaseNamerClient, empty *empty.
 	log.Println(feature)
 }
 
+// getCandies gets the candy.
+func getRandomCandy(logger *slog.Logger, client pb.ReleaseNamerClient, empty *empty.Empty) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	feature, err := client.GetRandomCandy(ctx, empty)
+	if err != nil {
+		logger.Error("client.GetFeature failed: %v", err)
+	}
+	log.Println(feature)
+}
+
 func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout))
 
@@ -58,6 +69,8 @@ func main() {
 	defer conn.Close()
 	client := pb.NewReleaseNamerClient(conn)
 
-	// RecordRoute
+	// run getCandies
 	getCandies(logger, client, &empty.Empty{})
+
+	getRandomCandy(logger, client, &empty.Empty{})
 }
