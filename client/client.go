@@ -22,7 +22,7 @@ var (
 	serverHostOverride = flag.String("server_host_override", "x.test.example.com", "The server name used to verify the hostname returned by the TLS handshake")
 )
 
-// getCandies gets the candy.
+// getCandies gets the candies.
 func getCandies(logger *slog.Logger, client pb.ReleaseNamerClient, empty *empty.Empty) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -33,7 +33,7 @@ func getCandies(logger *slog.Logger, client pb.ReleaseNamerClient, empty *empty.
 	log.Println(feature)
 }
 
-// getCandies gets the candy.
+// getRandomCandy gets one randomly selected candy.
 func getRandomCandy(logger *slog.Logger, client pb.ReleaseNamerClient, empty *empty.Empty) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
