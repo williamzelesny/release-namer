@@ -8,6 +8,7 @@ import (
 	"golang.org/x/exp/slog"
 	"net"
 	"os"
+	"williamzelesny/release-namer/scrapers"
 
 	"google.golang.org/grpc"
 	pb "williamzelesny/release-namer/releasenamer"
@@ -23,10 +24,12 @@ type releaseNamerServer struct {
 }
 
 func (s *releaseNamerServer) GetCandies(ctx context.Context, empty *empty.Empty) (*pb.CandyResponse, error) {
-	candies := []*pb.Candy{
-		&pb.Candy{Name: "Twizzlers"},
-		&pb.Candy{Name: "Skittles"},
-	}
+	//candies := []*pb.Candy{
+	//	&pb.Candy{Name: "Twizzlers"},
+	//	&pb.Candy{Name: "Skittles"},
+	//}
+	candies, _ := scrapers.GetCandies()
+
 	return &pb.CandyResponse{Candies: candies}, nil
 }
 

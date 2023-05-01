@@ -1,21 +1,28 @@
 package scrapers
 
 import (
+	"io"
 	"net/http"
 	"strings"
+	"williamzelesny/release-namer/releasenamer"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
-func GetCandies() ([]string, error) {
-	var candies []string
+func GetCandies() ([]*releasenamer.Candy, error) {
+	var candies []*releasenamer.Candy
 
 	// Send a GET request to the Wikipedia page
 	resp, err := http.Get("https://en.wikipedia.org/wiki/List_of_candies")
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+
+		}
+	}(resp.Body)
 
 	// Parse the HTML using goquery
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
@@ -30,7 +37,7 @@ func GetCandies() ([]string, error) {
 
 		// Only add non-blank candy names to the array
 		if candyName != "" {
-			candies = append(candies, candyName)
+			candies = append(candies, &releasenamer.Candy{Name: candyName})
 		}
 	})
 
